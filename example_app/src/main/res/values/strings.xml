@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">SparkSDK_android_first_try</string>
+
+    <string name="hello_world">Splash!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="login">Login</string>
+    <string name="title_activity_value">ValueActivity</string>
+    <!-- Encrypted username and password-->
+    <string name="userName">l/25jGKXJbTvC2zY0mhWwX+SXUrYLfvcSRoabplr5ZQ=</string>
+    <string name="password">XwrZPAyGCEBHLacB0cgEUw==</string>
+    <string name="deviceid">260033001651353530333533</string>
+    <string name="variableName">in</string>
+
+</resources>
