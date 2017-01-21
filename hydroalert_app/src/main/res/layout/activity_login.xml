@@ -7,28 +7,27 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="io.particle.cloudsdk.example_app.LoginActivity">
+    tools:context=".LoginActivity">
 
     <TextView
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login to Particle"
+        android:text="Login"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <LinearLayout
+        android:paddingTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-
 
         <TextView
             android:id="@+id/email_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="email"
-            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="#7C4DFF"/>
 
@@ -38,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
             android:inputType="textEmailAddress"
-            android:hint="email"
+            android:hint="Enter email"
             android:editable="false"
             android:enabled="false"/>
 
@@ -55,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="password"
-            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="20sp"
             android:textColor="#7C4DFF"
             android:textStyle="bold"/>
 
@@ -65,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
             android:inputType="textPassword"
-            android:hint="password"
+            android:hint="Enter password"
             android:editable="false"
             android:enabled="false"/>
 

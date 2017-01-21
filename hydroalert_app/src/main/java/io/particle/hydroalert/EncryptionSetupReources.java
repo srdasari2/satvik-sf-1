@@ -1,4 +1,4 @@
-package io.particle.cloudsdk.example_app;
+package io.particle.hydroalert;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,8 +8,6 @@ import android.util.Base64;
 import com.cimosys.common.encryption.Encryption;
 import com.cimosys.common.encryption.Encryption.CipherInitializationException;
 import com.cimosys.common.encryption.SimpleCipher;
-import io.particle.cloudsdk.example_app.EncryptionUtil;
-
 
 
 public class EncryptionSetupReources{

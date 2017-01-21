@@ -1,4 +1,4 @@
-package io.particle.cloudsdk.example_app;
+package io.particle.hydroalert;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.telephony.SmsManager;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -24,8 +23,8 @@ import io.particle.android.sdk.utils.Toaster;
 
 public class ValueActivity extends AppCompatActivity {
 
-    private static final String ARG_VALUE = "ARG_VALUE";
-    private static final String ARG_DEVICEID = "ARG_DEVICEID";
+    public static final String ARG_VALUE = "ARG_VALUE";
+    public static final String ARG_DEVICEID = "ARG_DEVICEID";
 
     private String email;
     private String password;

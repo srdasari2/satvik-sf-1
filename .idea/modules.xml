@@ -3,8 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/cloudsdk/cloudsdk.iml" filepath="$PROJECT_DIR$/cloudsdk/cloudsdk.iml" />
-      <module fileurl="file://$PROJECT_DIR$/example_app/example_app.iml" filepath="$PROJECT_DIR$/example_app/example_app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/spark-sdk-android-master2.iml" filepath="$PROJECT_DIR$/spark-sdk-android-master2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hydroalert_app/hydroalert_app.iml" filepath="$PROJECT_DIR$/hydroalert_app/hydroalert_app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spark-sdk-android-master.iml" filepath="$PROJECT_DIR$/spark-sdk-android-master.iml" />
     </modules>
   </component>
 </project>

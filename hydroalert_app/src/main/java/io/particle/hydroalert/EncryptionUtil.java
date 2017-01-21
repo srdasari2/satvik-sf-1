@@ -1,4 +1,4 @@
-package io.particle.cloudsdk.example_app;
+package io.particle.hydroalert;
 
 import java.io.File;
 import java.io.FileOutputStream;
