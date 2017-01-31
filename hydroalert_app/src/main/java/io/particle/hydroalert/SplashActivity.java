@@ -1,12 +1,17 @@
 package io.particle.hydroalert;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ProgressBar;
+
+import com.cimosys.basic.encryption.util.CipherHelper;
+import com.cimosys.common.encryption.SimpleCipher;
 
 import java.io.IOException;
 
@@ -24,12 +29,25 @@ public class SplashActivity extends AppCompatActivity {
     private String email;
     private String password;
     private ProgressBar progressBar;
+    SharedPreferences SP;
+    EncryptionSetupReources encryptionSetupReources;
+    CipherHelper cipherHelper;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        SP = getApplication().getSharedPreferences("encryption", Context.MODE_PRIVATE);
+        SP.edit().putString("CipherPwd", getString(R.string.cipher_password)).commit();
+        cipherHelper = new CipherHelper(SP.getString("CipherPwd", null));
+
+        SP.edit().putString("username",  "j4tKVc6tfPL6xbfbRVC7Jq+XfUpkMy74").commit();
+        SP.edit().putString("password", "kV5cnTROajGXNXQKv1a/Qg==").commit();
+
+        encryptionSetupReources = EncryptionSetupReources.getInstance(getApplicationContext());
+
+
 
         progressBar = (ProgressBar) findViewById(R.id.progressbar);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
@@ -40,20 +58,8 @@ public class SplashActivity extends AppCompatActivity {
 
 
     private void login() {
-        // try {
-
-        //Log.d("Encrypted username : ", EncryptionSetupReources.getInstance(getApplicationContext()).aesCiph.encrypt("srdasari1@gmail.com"));
-        //Log.d("Encrypted username : ", EncryptionSetupReources.getInstance(getApplicationContext()).aesCiph.encrypt("bluealerttx@gmail.com"));
-        //email = EncryptionSetupReources.getInstance(getApplicationContext()).aesCiph.decrypt(getString(R.string.userName));
-        //password = EncryptionSetupReources.getInstance(getApplicationContext()).aesCiph.decrypt(getString(R.string.password));
-
-        email = "bluealerttx@gmail.com";
-        password = "Satviklaya";
-//
-//        } catch (SimpleCipher.EncryptionException e) {
-//            e.printStackTrace();
-//        }
-
+        email = cipherHelper.decrypt(SP.getString("username", null));
+        password = cipherHelper.decrypt(SP.getString("password", null));
 
         Async.executeAsync(ParticleCloud.get(SplashActivity.this), new Async.ApiWork<ParticleCloud, Object>() {
 

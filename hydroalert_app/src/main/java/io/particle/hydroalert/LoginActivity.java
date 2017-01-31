@@ -3,8 +3,10 @@ package io.particle.hydroalert;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,10 +15,13 @@ import android.view.View;
 import android.widget.Button;
 
 
+import com.cimosys.basic.encryption.util.CipherHelper;
 import com.cimosys.common.encryption.SimpleCipher;
 
 
 import java.io.IOException;
+
+import javax.crypto.Cipher;
 
 import io.particle.android.sdk.cloud.ParticleCloud;
 import io.particle.android.sdk.cloud.ParticleCloudException;
@@ -31,10 +36,18 @@ public class LoginActivity extends AppCompatActivity {
  protected AlertDialog dialog = null;
  protected static final int PROGRESS_BAR = 5;
  protected boolean dialogShowing = false;
+    SharedPreferences SP;
+    CipherHelper cipherHelper;
  AsyncTask task;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SP = getApplication().getSharedPreferences("encryption", Context.MODE_PRIVATE);
+        SP.edit().putString("CipherPwd", getString(R.string.cipher_password)).commit();
+        cipherHelper = new CipherHelper(SP.getString("CipherPwd", null));
         setContentView(R.layout.activity_login);
         loginButton = (Button) findViewById(R.id.login_button);
         loginButton.setEnabled(false);
@@ -50,18 +63,9 @@ public class LoginActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(final View v) {
-                        try {
 
-                            //Log.d("Encrypted username : ", EncryptionSetupReources.getInstance(getApplicationContext()).aesCiph.encrypt("srdasari1@gmail.com"));
-                            //Log.d("Encrypted username : ", EncryptionSetupReources.getInstance(getApplicationContext()).aesCiph.encrypt("bluealerttx@gmail.com"));
-                            email = EncryptionSetupReources.getInstance(getApplicationContext()).aesCiph.decrypt(getString(R.string.userName));
-                            Toaster.s(LoginActivity.this, email);
-                            password = EncryptionSetupReources.getInstance(getApplicationContext()).aesCiph.decrypt(getString(R.string.password));
-                            Toaster.s(LoginActivity.this, password);
-                        } catch (SimpleCipher.EncryptionException e) {
-                            e.printStackTrace();
-                        }
-
+                            email = cipherHelper.decrypt(SP.getString("username", null));
+                            password = cipherHelper.decrypt(SP.getString("password", null));
 
                         // Don't:
                         task = new AsyncTask() {
