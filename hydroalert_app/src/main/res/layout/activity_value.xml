@@ -10,6 +10,8 @@
     tools:context=".ValueActivity">
 
     <TextView
+
+        android:id="@+id/alertTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"

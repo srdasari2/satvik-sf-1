@@ -10,5 +10,5 @@
     <string name="cipher_password"> "ThisisTestPwd12345$!@@@"</string>
     <string name="deviceid">260033001651353530333533</string>
     <string name="variableName">in</string>
-
+    <string name="flood_warning_title">Flood Warning</string>
 </resources>

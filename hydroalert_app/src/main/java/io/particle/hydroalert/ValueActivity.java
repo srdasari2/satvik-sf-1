@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -30,31 +31,50 @@ public class ValueActivity extends AppCompatActivity {
     private Button refreshButton;
     private TextView tv;
     int bridgeLevel = 10;
+    private TextView alertTitle;
+    private ImageView warningImage;
+    RelativeLayout mRelativeLayout;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_value);
+        DateFormat df = new SimpleDateFormat("h:mm:ss a");
+        String timeMsg =  df.format(Calendar.getInstance().getTime());
         tv = (TextView) findViewById(R.id.value);
+        alertTitle = (TextView)findViewById(R.id.alertTitle);
+        warningImage = (ImageView)findViewById(R.id.warningImage);
         int value = getIntent().getIntExtra(ARG_VALUE, 0);
-        final RelativeLayout mRelativeLayout = (RelativeLayout)findViewById(R.id.valuelayout);
+       mRelativeLayout = (RelativeLayout)findViewById(R.id.valuelayout);
 
         String msgToDisplay ="";
         int difference = bridgeLevel - value ;
-        if(difference < 0){
-            msgToDisplay = "Water level is " + Math.abs(difference) + "  inches below Bridge/Road Surface";
-            mRelativeLayout.setBackgroundColor(Color.GREEN);
+        if(difference < -5) {
+            msgToDisplay = "Water level is " + Math.abs(difference) + "  inches below Road Surface";
+            mRelativeLayout.setBackgroundColor(Color.parseColor("#4CAF50"));
+            alertTitle.setVisibility(View.GONE);
+            warningImage.setVisibility(View.GONE);
         }
-        else if(difference  > 0){
-            msgToDisplay = " Water level is " + Math.abs(difference) + "inches   Above Bridge/Road Surface";
-            mRelativeLayout.setBackgroundColor(Color.RED);
+        else if(difference>-5 && difference  <0){
+            msgToDisplay = "Water level is " + Math.abs(difference) + " inches below or at Road Surface";
+            mRelativeLayout.setBackgroundColor(Color.parseColor("#FBC02D"));
+            alertTitle.setText("Flood Watch");
+            warningImage.setImageResource(R.drawable.ic_warning_black_48dp);
+            alertTitle.setVisibility(View.VISIBLE);
+            warningImage.setVisibility(View.VISIBLE);
         }
-        else if(difference == 0) {
-            msgToDisplay = "Water is at Bridge/Road Surface  ";
-            mRelativeLayout.setBackgroundColor(Color.YELLOW);
+        else if(difference  >= 0) {
+            msgToDisplay = "Water level is " + Math.abs(difference) +  " inches above Road Surface  ";
+            mRelativeLayout.setBackgroundColor(Color.parseColor("#B71C1C"));
+            alertTitle.setText("Flood Warning");
+            warningImage.setImageResource(R.drawable.ic_warning_black_48dp);
+            alertTitle.setVisibility(View.VISIBLE);
+            warningImage.setVisibility(View.VISIBLE);
         }
-        tv.setText(String.valueOf(getIntent().getIntExtra(ARG_VALUE, 0)));
+        msgToDisplay = msgToDisplay + "\n" +timeMsg;
+        tv.setText(msgToDisplay);
+        //tv.setTextColor(Color.parseColor("#F44336"));
         tv.setTextColor(Color.WHITE);
 
 
@@ -91,20 +111,29 @@ public class ValueActivity extends AppCompatActivity {
                         String timeMsg =  df.format(Calendar.getInstance().getTime());
                         String msgToDisplay = "";
                        // Toast.makeText(ValueActivity.this, "" +difference, Toast.LENGTH_SHORT).show();
-                        if(difference < 0){
-                            msgToDisplay = "Water level is " + Math.abs(difference) + "  inches below Bridge/Road Surface  ";
-                            mRelativeLayout.setBackgroundColor(Color.GREEN);
-
+                        if(difference < -5) {
+                            msgToDisplay = "Water level is " + Math.abs(difference) + "  inches below Road Surface";
+                            mRelativeLayout.setBackgroundColor(Color.parseColor("#4CAF50"));
+                            alertTitle.setVisibility(View.GONE);
+                            warningImage.setVisibility(View.GONE);
                         }
-                        else if(difference  > 0){
-                            msgToDisplay = " Water level is " + Math.abs(difference) + "inches   Above Bridge/Road Surface   ";
-                            mRelativeLayout.setBackgroundColor(Color.RED);
+                        else if(difference>-5 && difference  <0){
+                            msgToDisplay = "Water level is " + Math.abs(difference) + " inches below or at Road Surface";
+                            mRelativeLayout.setBackgroundColor(Color.parseColor("#FBC02D"));
+                            alertTitle.setText("Flood Watch");
+                            warningImage.setImageResource(R.drawable.ic_warning_black_48dp);
+                            alertTitle.setVisibility(View.VISIBLE);
+                            warningImage.setVisibility(View.VISIBLE);
                         }
-                        else if(difference == 0) {
-                            msgToDisplay = "Water is at Bridge/Road Surface    ";
-                            mRelativeLayout.setBackgroundColor(Color.YELLOW);
+                        else if(difference  >= 0) {
+                            msgToDisplay = "Water level is " + Math.abs(difference) +  " inches above Road Surface  ";
+                            mRelativeLayout.setBackgroundColor(Color.parseColor("#B71C1C"));
+                            alertTitle.setText("Flood Warning");
+                            warningImage.setImageResource(R.drawable.ic_warning_black_48dp);
+                            alertTitle.setVisibility(View.VISIBLE);
+                            warningImage.setVisibility(View.VISIBLE);
                         }
-                        msgToDisplay = msgToDisplay + timeMsg;
+                        msgToDisplay = msgToDisplay + "\n" +timeMsg;
                         tv.setText(msgToDisplay);
                         //tv.setTextColor(Color.parseColor("#F44336"));
                         tv.setTextColor(Color.WHITE);
@@ -127,6 +156,11 @@ public class ValueActivity extends AppCompatActivity {
         intent.putExtra(ARG_DEVICEID, deviceid);
 
         return intent;
+    }
+
+    public void processValues(int waterLevel)
+    {
+
     }
 
 
