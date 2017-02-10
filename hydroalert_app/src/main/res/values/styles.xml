@@ -1,8 +1,19 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="actionBarStyle">@style/hydroactionbar</item>
+
+
         <!-- Customize your theme here. -->
+    </style>
+    <style name="hydroactionbar" parent= "@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+    <item name="android:background">@color/app_color</item>
+        <item name="elevation">0dp</item>
+        </style>
+    <style name="textstyle" parent="TextAppearance.AppCompat">
+
+        <item name="android:textAppearance">@style/Base.TextAppearance.AppCompat.Medium</item>
     </style>
 
 </resources>
