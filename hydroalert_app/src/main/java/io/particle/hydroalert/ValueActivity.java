@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -19,7 +19,6 @@ import io.particle.android.sdk.cloud.ParticleCloud;
 import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.utils.Async;
-import io.particle.android.sdk.utils.Toaster;
 
 public class ValueActivity extends AppCompatActivity {
 
@@ -39,18 +38,25 @@ public class ValueActivity extends AppCompatActivity {
         setContentView(R.layout.activity_value);
         tv = (TextView) findViewById(R.id.value);
         int value = getIntent().getIntExtra(ARG_VALUE, 0);
+        final RelativeLayout mRelativeLayout = (RelativeLayout)findViewById(R.id.valuelayout);
+
         String msgToDisplay ="";
         int difference = bridgeLevel - value ;
         if(difference < 0){
             msgToDisplay = "Water level is " + Math.abs(difference) + "  inches below Bridge/Road Surface";
+            mRelativeLayout.setBackgroundColor(Color.GREEN);
         }
         else if(difference  > 0){
             msgToDisplay = " Water level is " + Math.abs(difference) + "inches   Above Bridge/Road Surface";
+            mRelativeLayout.setBackgroundColor(Color.RED);
         }
         else if(difference == 0) {
             msgToDisplay = "Water is at Bridge/Road Surface  ";
+            mRelativeLayout.setBackgroundColor(Color.YELLOW);
         }
         tv.setText(String.valueOf(getIntent().getIntExtra(ARG_VALUE, 0)));
+        tv.setTextColor(Color.WHITE);
+
 
         refreshButton = (Button)findViewById(R.id.refresh_button);
         refreshButton.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +77,7 @@ public class ValueActivity extends AppCompatActivity {
 
                             }
                         } catch (ParticleDevice.VariableDoesNotExistException e) {
-                            Toaster.l(ValueActivity.this, e.getMessage());
+                            //Toaster.l(ValueActivity.this, e.getMessage());
                             variable = -1;
                         }
                         return variable;
@@ -84,19 +90,24 @@ public class ValueActivity extends AppCompatActivity {
                         DateFormat df = new SimpleDateFormat("h:mm:ss a");
                         String timeMsg =  df.format(Calendar.getInstance().getTime());
                         String msgToDisplay = "";
-                        Toast.makeText(ValueActivity.this, "" +difference, Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(ValueActivity.this, "" +difference, Toast.LENGTH_SHORT).show();
                         if(difference < 0){
                             msgToDisplay = "Water level is " + Math.abs(difference) + "  inches below Bridge/Road Surface  ";
+                            mRelativeLayout.setBackgroundColor(Color.GREEN);
+
                         }
                         else if(difference  > 0){
                             msgToDisplay = " Water level is " + Math.abs(difference) + "inches   Above Bridge/Road Surface   ";
+                            mRelativeLayout.setBackgroundColor(Color.RED);
                         }
                         else if(difference == 0) {
                             msgToDisplay = "Water is at Bridge/Road Surface    ";
+                            mRelativeLayout.setBackgroundColor(Color.YELLOW);
                         }
                         msgToDisplay = msgToDisplay + timeMsg;
                         tv.setText(msgToDisplay);
-                        tv.setTextColor(Color.parseColor("#F44336"));
+                        //tv.setTextColor(Color.parseColor("#F44336"));
+                        tv.setTextColor(Color.WHITE);
                     }
 
                     @Override
