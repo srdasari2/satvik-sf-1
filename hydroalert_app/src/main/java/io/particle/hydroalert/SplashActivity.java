@@ -11,7 +11,6 @@ import android.util.Log;
 import android.widget.ProgressBar;
 
 import com.cimosys.basic.encryption.util.CipherHelper;
-import com.cimosys.common.encryption.SimpleCipher;
 
 import java.io.IOException;
 
@@ -68,12 +67,12 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public Object callApi(ParticleCloud sparkCloud) throws ParticleCloudException, IOException {
-                sparkCloud.logIn(email, password);
+                sparkCloud.logIn(email, password); //Login to the IoT cloud
                 sparkCloud.getDevices();
-                mDevice = sparkCloud.getDevice(getString(R.string.deviceid));
+                mDevice = sparkCloud.getDevice(getString(R.string.deviceid)); //Get the device handle using deviceId
 
                 try {
-                    distance = mDevice.getIntVariable("in");
+                    distance = mDevice.getIntVariable("in");  //Read the distance from Cloud
                     Log.d("Distance", "IN: " + distance);
                 } catch (ParticleDevice.VariableDoesNotExistException e) {
                     Log.e("Error", "Variable does not exist");

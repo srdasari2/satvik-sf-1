@@ -30,7 +30,7 @@ public class ValueActivity extends AppCompatActivity {
     private String password;
     private Button refreshButton;
     private TextView tv;
-    int bridgeLevel = 10;
+    int bridgeLevel = 10;    //BRIDGE LEVEL
     private TextView alertTitle;
     private ImageView warningImage;
     RelativeLayout mRelativeLayout;
@@ -51,13 +51,13 @@ public class ValueActivity extends AppCompatActivity {
         String msgToDisplay ="";
         int difference = bridgeLevel - value ;
         if(difference < -5) {
-            msgToDisplay = "Water level is " + Math.abs(difference) + "  inches below Road Surface";
+            msgToDisplay = "Water Level Is " + Math.abs(difference) + "  Inches Below Road Surface";
             mRelativeLayout.setBackgroundColor(Color.parseColor("#4CAF50"));
             alertTitle.setVisibility(View.GONE);
             warningImage.setVisibility(View.GONE);
         }
-        else if(difference>-5 && difference  <0){
-            msgToDisplay = "Water level is " + Math.abs(difference) + " inches below or at Road Surface";
+        else if(difference>=-5 && difference  <0){
+            msgToDisplay = "Water Level Is " + Math.abs(difference) + " Inches Below Road Surface";
             mRelativeLayout.setBackgroundColor(Color.parseColor("#FBC02D"));
             alertTitle.setText("Flood Watch");
             warningImage.setImageResource(R.drawable.ic_warning_black_48dp);
@@ -65,7 +65,7 @@ public class ValueActivity extends AppCompatActivity {
             warningImage.setVisibility(View.VISIBLE);
         }
         else if(difference  >= 0) {
-            msgToDisplay = "Water level is " + Math.abs(difference) +  " inches above Road Surface  ";
+            msgToDisplay = "Water Level Is " + Math.abs(difference) +  " Inches Above Road Surface  ";
             mRelativeLayout.setBackgroundColor(Color.parseColor("#B71C1C"));
             alertTitle.setText("Flood Warning");
             warningImage.setImageResource(R.drawable.ic_warning_black_48dp);
@@ -112,13 +112,13 @@ public class ValueActivity extends AppCompatActivity {
                         String msgToDisplay = "";
                        // Toast.makeText(ValueActivity.this, "" +difference, Toast.LENGTH_SHORT).show();
                         if(difference < -5) {
-                            msgToDisplay = "Water level is " + Math.abs(difference) + "  inches below Road Surface";
+                            msgToDisplay = "Water Level Is " + Math.abs(difference) + "  Inches Below Road Surface";
                             mRelativeLayout.setBackgroundColor(Color.parseColor("#4CAF50"));
                             alertTitle.setVisibility(View.GONE);
                             warningImage.setVisibility(View.GONE);
                         }
-                        else if(difference>-5 && difference  <0){
-                            msgToDisplay = "Water level is " + Math.abs(difference) + " inches below or at Road Surface";
+                        else if(difference>=-5 && difference  <0){
+                            msgToDisplay = "Water Level Is " + Math.abs(difference) + " Inches Below Road Surface";
                             mRelativeLayout.setBackgroundColor(Color.parseColor("#FBC02D"));
                             alertTitle.setText("Flood Watch");
                             warningImage.setImageResource(R.drawable.ic_warning_black_48dp);
@@ -126,7 +126,7 @@ public class ValueActivity extends AppCompatActivity {
                             warningImage.setVisibility(View.VISIBLE);
                         }
                         else if(difference  >= 0) {
-                            msgToDisplay = "Water level is " + Math.abs(difference) +  " inches above Road Surface  ";
+                            msgToDisplay = "Water Level Is " + Math.abs(difference) +  " Inches Above Road Surface  ";
                             mRelativeLayout.setBackgroundColor(Color.parseColor("#B71C1C"));
                             alertTitle.setText("Flood Warning");
                             warningImage.setImageResource(R.drawable.ic_warning_black_48dp);
