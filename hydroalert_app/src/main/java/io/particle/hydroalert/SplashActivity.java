@@ -13,14 +13,14 @@ import android.widget.ProgressBar;
 import com.cimosys.basic.encryption.util.CipherHelper;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import io.particle.android.sdk.cloud.ParticleCloud;
 import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.utils.Async;
 
-import static io.particle.hydroalert.ValueActivity.ARG_DEVICEID;
-import static io.particle.hydroalert.ValueActivity.ARG_VALUE;
+import static io.particle.hydroalert.ListActivity.DEVICE_LIST;
 
 
 public class SplashActivity extends AppCompatActivity {
@@ -31,6 +31,7 @@ public class SplashActivity extends AppCompatActivity {
     SharedPreferences SP;
     EncryptionSetupReources encryptionSetupReources;
     CipherHelper cipherHelper;
+    private ArrayList<ParticleDevice> deviceList;
 
 
     @Override
@@ -68,16 +69,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public Object callApi(ParticleCloud sparkCloud) throws ParticleCloudException, IOException {
                 sparkCloud.logIn(email, password); //Login to the IoT cloud
-                sparkCloud.getDevices();
-                mDevice = sparkCloud.getDevice(getString(R.string.deviceid)); //Get the device handle using deviceId
-
-                try {
-                    distance = mDevice.getIntVariable("in");  //Read the distance from Cloud
-                    Log.d("Distance", "IN: " + distance);
-                } catch (ParticleDevice.VariableDoesNotExistException e) {
-                    Log.e("Error", "Variable does not exist");
-                }
-
+               deviceList =  (ArrayList)sparkCloud.getDevices();
                 return -1;
 
             }
@@ -85,9 +77,8 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Object value) {
                 Log.d("Login Successful", "Logged in");
-                Intent intent = new Intent(SplashActivity.this, ValueActivity.class);
-                intent.putExtra(ARG_VALUE, distance);
-                intent.putExtra(ARG_DEVICEID, mDevice.getID());
+                Intent intent = new Intent(SplashActivity.this, ListActivity.class);
+                intent.putParcelableArrayListExtra(DEVICE_LIST, deviceList);
                 startActivity(intent);
                 finish();
             }

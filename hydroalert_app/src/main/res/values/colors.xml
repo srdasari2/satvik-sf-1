@@ -2,5 +2,7 @@
 <resources>
     <color name="app_color">#448aff</color>
     <color name="app_color_light">#86448aff</color>
-
+    <color name="text_color_device_name">#2B3D4D</color>
+    <color name="devie_list_background">#84FFFF</color>
+    <color name="list_item_color">#FFFFFF</color>
 </resources>

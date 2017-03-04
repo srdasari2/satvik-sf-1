@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.particle.hydroalert" >
+    package="io.particle.hydroalert">
+
     <uses-permission android:name="android.permission.SEND_SMS" />
-    <!-- icon : App Icon
+
+    <!--
+     icon : App Icon
           Label : Title
           Themse: style
-     -->
+    -->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/hydroalert_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-        <!-- Each activity is a screen/page-->
+        android:theme="@style/AppTheme">
+
+        <!-- Each activity is a screen/page -->
         <activity
             android:name=".SplashActivity"
             android:label="@string/app_name"
@@ -22,11 +26,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ValueActivity"
+        <activity android:name=".ValueActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"
+            android:parentActivityName=".ListActivity"></activity>
+        <activity android:label="Locations" android:name=".ListActivity"></activity>
     </application>
 
 </manifest>

@@ -11,4 +11,5 @@
     <string name="deviceid">28001b000f47343432313031</string>
     <string name="variableName">in</string>
     <string name="flood_warning_title">Flood Warning</string>
+    <string name="flood_watch_title">Flood Watch</string>
 </resources>
