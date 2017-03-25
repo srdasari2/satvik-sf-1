@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.io.IOException;
@@ -22,6 +21,7 @@ import static io.particle.hydroalert.ValueActivity.ARG_VALUE;
 
 public class ListActivity extends AppCompatActivity {
     public static final String DEVICE_LIST = "DEVICE_LIST";
+    private ArrayList<DeviceDetails> mDeviceDetails = new ArrayList<>();
     private ArrayList<ParticleDevice> deviceList= null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +29,12 @@ public class ListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
         ListView listView = (ListView)findViewById(R.id.devicelist);
         deviceList = getIntent().getParcelableArrayListExtra(DEVICE_LIST);
-        String[]  deviceNames = extractDeviceNames(deviceList);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.list_item, deviceNames);
-        listView.setAdapter(arrayAdapter);
+       // ArrayList<DeviceDetails> mDeviceDetails = new ArrayList<>();
+       // String[]  deviceNames = extractDeviceNames(deviceList);
+        extractDeviceDetails(deviceList);
+        DeviceDetailsAdapter adapter = new DeviceDetailsAdapter(ListActivity.this, mDeviceDetails);
+       // ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.list_item, deviceNames);
+        listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -52,7 +55,7 @@ public class ListActivity extends AppCompatActivity {
                             Log.e("Error", "Variable does not exist");
                         }
 
-                        return -1;
+                        return String.valueOf(distance);
 
                     }
 
@@ -81,10 +84,22 @@ public class ListActivity extends AppCompatActivity {
     }
 
     private String[] extractDeviceNames(ArrayList<ParticleDevice> cloudDevices){
-       String[] devices = new String[cloudDevices.size()];
+       String[] devices = new String[cloudDevices.size()-1];
         for(int i=0;i<cloudDevices.size()-1;i++){
             devices[i] = cloudDevices.get(i).getName();
         }
         return devices;
+    }
+    private void extractDeviceDetails(ArrayList<ParticleDevice> cloudDevices){
+        for(int i=0;i<cloudDevices.size(); i++){
+            DeviceDetails details = new DeviceDetails();
+            ParticleDevice device = cloudDevices.get(i);
+            if(device !=null) {
+                details.setDeviceName(device.getName());
+                details.setConnected(device.isConnected());
+                mDeviceDetails.add(details);
+            }
+        }
+
     }
 }

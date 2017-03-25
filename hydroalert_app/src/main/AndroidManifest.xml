@@ -26,11 +26,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ValueActivity"
+        <activity
+            android:name=".ValueActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:parentActivityName=".ListActivity"></activity>
-        <activity android:label="Locations" android:name=".ListActivity"></activity>
+        <activity android:label="Locations" android:name=".ListActivity">t</activity>
     </application>
 
 </manifest>

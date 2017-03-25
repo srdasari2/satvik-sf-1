@@ -36,7 +36,6 @@ public class ValueActivity extends AppCompatActivity {
     private String password;
     private Button refreshButton;
     private TextView tv;
-    int bridgeLevel = 10;    //BRIDGE LEVEL
     private TextView alertTitle;
     private ImageView warningImage;
     RelativeLayout mRelativeLayout;
@@ -116,7 +115,8 @@ public class ValueActivity extends AppCompatActivity {
         mRelativeLayout = (RelativeLayout)findViewById(R.id.valuelayout);
 
         String msgToDisplay ="";
-        int difference = bridgeLevel - value ;
+      //  int difference = bridgeLevel - value ;
+        int difference = value;
         if(difference < -5) {
             msgToDisplay = "Water Level Is " + Math.abs(difference) + "  Inches Below Road Surface";
             mRelativeLayout.setBackgroundColor(Color.parseColor("#4CAF50"));
@@ -148,6 +148,10 @@ public class ValueActivity extends AppCompatActivity {
 
     }
 
+
+    private void displayMessage(int result){
+
+    }
     private final Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
