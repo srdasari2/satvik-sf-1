@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by qz2zvk on 3/11/17.
@@ -37,7 +38,9 @@ public class DeviceDetailsAdapter extends ArrayAdapter<DeviceDetails> {
         TextView status = (TextView)currentView.findViewById(R.id.status);
         GradientDrawable mGradientDrawable = (GradientDrawable)status.getBackground();
         deviceName.setText(details.getDeviceName());
-        if(details.isConnected()){
+        Date lastHeard = details.getLastHeard();
+        long differenceInMinutes = (Math.abs(lastHeard.getTime() - new Date().getTime())/60000);
+        if(details.isConnected() ){ //&& differenceInMinutes < 10)
             mGradientDrawable.setColor(ContextCompat.getColor(getContext(), R.color.device_online));
             status.setText("On");
         }
@@ -46,5 +49,8 @@ public class DeviceDetailsAdapter extends ArrayAdapter<DeviceDetails> {
             status.setText("Off");
         }
         return currentView;
+    }
+    public void setmDeviceDetails(ArrayList<DeviceDetails> deviceDetails){
+        this.mDeviceDetails = deviceDetails;
     }
 }

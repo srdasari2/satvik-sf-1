@@ -25,7 +25,8 @@ import retrofit.converter.GsonConverter;
 public class ApiFactory {
 
     // both values are in seconds
-    private static final int REGULAR_TIMEOUT = 35;
+    //private static final int REGULAR_TIMEOUT = 35;
+    private static final int REGULAR_TIMEOUT = 10;
     // FIXME: find a less cheesy solution to the "rapid timeout" problem
     private static final int PER_DEVICE_FAST_TIMEOUT = 5;
 

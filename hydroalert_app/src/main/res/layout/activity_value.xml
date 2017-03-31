@@ -12,7 +12,7 @@
     <TextView
 
         android:id="@+id/alertTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -34,12 +34,12 @@
     <TextView
         style= "@style/textstyle"
         android:id="@+id/value"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_margin="15dp"
-        android:text="0"
+        android:text="Water Level is Below Road Surface"
         android:textSize="28sp" />
 
     <Button

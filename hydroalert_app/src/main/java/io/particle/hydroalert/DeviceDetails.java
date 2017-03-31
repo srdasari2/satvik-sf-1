@@ -1,5 +1,7 @@
 package io.particle.hydroalert;
 
+import java.util.Date;
+
 /**
  * Created by qz2zvk on 3/11/17.
  */
@@ -23,4 +25,27 @@ public class DeviceDetails {
 
     private String deviceName;
     private boolean isConnected;
+
+    public DeviceDetails(String deviceName, boolean isConnected, Date lastHeard) {
+        this.deviceName = deviceName;
+        this.isConnected = isConnected;
+        this.lastHeard = lastHeard;
+    }
+public DeviceDetails(){
+
 }
+    public Date getLastHeard() {
+
+        return lastHeard;
+    }
+
+    public void setLastHeard(Date lastHeard) {
+        this.lastHeard = lastHeard;
+    }
+
+    private Date lastHeard;
+
+}
+
+
+

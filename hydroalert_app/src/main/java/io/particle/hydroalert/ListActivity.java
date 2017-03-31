@@ -1,12 +1,17 @@
 package io.particle.hydroalert;
+//Importing all the files needed for this class
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,62 +26,91 @@ import static io.particle.hydroalert.ValueActivity.ARG_VALUE;
 
 public class ListActivity extends AppCompatActivity {
     public static final String DEVICE_LIST = "DEVICE_LIST";
-    private ArrayList<DeviceDetails> mDeviceDetails = new ArrayList<>();
+    private ArrayList<DeviceDetails> mDeviceDetails;
     private ArrayList<ParticleDevice> deviceList= null;
+    private final String LOG_TAG = ListActivity.class.getName();
+    private ProgressBar progressBar;
+    private DeviceDetailsAdapter adapter;
+    private Button refresh;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
-        ListView listView = (ListView)findViewById(R.id.devicelist);
-        deviceList = getIntent().getParcelableArrayListExtra(DEVICE_LIST);
-       // ArrayList<DeviceDetails> mDeviceDetails = new ArrayList<>();
-       // String[]  deviceNames = extractDeviceNames(deviceList);
-        extractDeviceDetails(deviceList);
-        DeviceDetailsAdapter adapter = new DeviceDetailsAdapter(ListActivity.this, mDeviceDetails);
+        super.onCreate(savedInstanceState); //Required Android super class methiod called onCreate
+        setContentView(R.layout.activity_list); // Setting View
+        final ListView listView = (ListView)findViewById(R.id.devicelist);
+        deviceList = getIntent().getParcelableArrayListExtra(DEVICE_LIST); //Getting the device list to show
+        extractDeviceDetails(deviceList);        //Getting device details form the cloud
+        adapter = new DeviceDetailsAdapter(ListActivity.this, mDeviceDetails); //Assigns the values to different UI elements on the screen
        // ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.list_item, deviceNames);
         listView.setAdapter(adapter);
+        progressBar = (ProgressBar) findViewById(R.id.progressbar);   //Showing progress Circle
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY); //Setting while color to Progress Circle
+        progressBar.setVisibility(View.GONE);
+        refresh = (Button)findViewById(R.id.refresh);
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateCloudDevices();
+            }
+        });
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                Async.executeAsync(ParticleCloud.get(ListActivity.this), new Async.ApiWork<ParticleCloud, Object>() {
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {  //Handling touch event for the device selected from the list
+                Log.d(LOG_TAG, "Device Clicked at position " + position);
+                progressBar.setVisibility(View.VISIBLE);
+                listView.setVisibility(View.GONE);
+                refresh.setVisibility(View.GONE);
 
-                    private ParticleDevice mDevice;
-                    int distance;
+                ParticleDevice device = deviceList.get(position);   // Get the position of the device selected by the user
+                if(device.isConnected()) {  //disabling the click action for offline devices
+                    Log.d(LOG_TAG, device.getName() + "Is Online");
+                    Async.executeAsync(ParticleCloud.get(ListActivity.this), new Async.ApiWork<ParticleCloud, Object>() {
 
-                    @Override
-                    public Object callApi(ParticleCloud sparkCloud) throws ParticleCloudException, IOException {
+                        private ParticleDevice mDevice;
+                        int distance = 1000; // Initialing the distance value
 
-                        mDevice = deviceList.get(position); //Get the device handle using deviceId
+                        @Override
+                        public Object callApi(ParticleCloud sparkCloud) throws ParticleCloudException, IOException {
 
-                        try {
-                            distance = mDevice.getIntVariable("in");  //Read the distance from Cloud
-                            Log.d("Distance", "IN: " + distance);
-                        } catch (ParticleDevice.VariableDoesNotExistException e) {
-                            Log.e("Error", "Variable does not exist");
+                            mDevice = deviceList.get(position); //Get the device handle using deviceId
+
+                            try {
+                                distance = mDevice.getIntVariable("in");  //Read the road2water_d3 from Cloud
+                                Log.d("Distance", "IN: " + distance);
+                            } catch (ParticleDevice.VariableDoesNotExistException e) {
+                                Log.e(LOG_TAG, "Variable does not exist");
+                                e.printStackTrace();
+                            }
+                            catch(ParticleCloudException e){
+                                Log.e(LOG_TAG, "Particle Cloud Excepion " + e.getBestMessage());
+                                e.printStackTrace();
+                            }
+
+                            return String.valueOf(distance);
+
                         }
 
-                        return String.valueOf(distance);
+                        @Override
+                        public void onSuccess(Object value) { //Successfully read the waterlevel from the device
+                            Log.d(LOG_TAG, "In variable read successfully " + value.toString());
+                            Intent intent = new Intent(ListActivity.this, ValueActivity.class);
+                            intent.putExtra(ARG_VALUE, distance);
+                            intent.putExtra(ARG_DEVICEID, mDevice.getID());
+                            intent.putExtra("device", mDevice);
+                            intent.putParcelableArrayListExtra(DEVICE_LIST, deviceList);
+                            startActivity(intent);  //Transferring to Alert screen
+                            progressBar.setVisibility(View.GONE);
+                            finish();
+                        }
 
-                    }
-
-                    @Override
-                    public void onSuccess(Object value) {
-                        Intent intent = new Intent(ListActivity.this, ValueActivity.class);
-                        intent.putExtra(ARG_VALUE, distance);
-                         intent.putExtra(ARG_DEVICEID, mDevice.getID());
-                        intent.putExtra("device", mDevice);
-                        intent.putParcelableArrayListExtra(DEVICE_LIST, deviceList);
-                       startActivity(intent);
-                        finish();
-                    }
-
-                    @Override
-                    public void onFailure(ParticleCloudException e) {
-                        Log.d("Login failed", e.getBestMessage());
-                        e.printStackTrace();
-                        Log.d("info", e.getBestMessage());
-                    }
-                });
+                        @Override
+                        public void onFailure(ParticleCloudException e) {
+                            Log.e(LOG_TAG, "Particle Cloud Exception " + e.getBestMessage());
+                            e.printStackTrace();
+                            Log.e("info", e.getMessage());  //
+                        }
+                    });
+                }
 
          }
         });
@@ -91,15 +125,49 @@ public class ListActivity extends AppCompatActivity {
         return devices;
     }
     private void extractDeviceDetails(ArrayList<ParticleDevice> cloudDevices){
-        for(int i=0;i<cloudDevices.size(); i++){
+        mDeviceDetails  = new ArrayList<>();
+        for(int i=0;i<cloudDevices.size(); i++){  //Looping through all particle devices
             DeviceDetails details = new DeviceDetails();
             ParticleDevice device = cloudDevices.get(i);
             if(device !=null) {
-                details.setDeviceName(device.getName());
-                details.setConnected(device.isConnected());
+                details.setDeviceName(device.getName());    //getting device name
+                details.setConnected(device.isConnected()); // Getting device status
+                details.setLastHeard(device.getLastHeard());    // Getting the date and time of the last heard
                 mDeviceDetails.add(details);
             }
         }
 
     }
-}
+
+    private void updateCloudDevices() {
+        Async.executeAsync(ParticleCloud.get(ListActivity.this), new Async.ApiWork<ParticleCloud, Object>() {
+
+
+            @Override
+            public Object callApi(ParticleCloud sparkCloud) throws ParticleCloudException, IOException {
+                deviceList =  (ArrayList)sparkCloud.getDevices();  //Get all Particle devices for this account
+                Log.d(LOG_TAG, "Number of devices retrived from Particle Cloud :" + deviceList.size() );
+                return -1;
+
+            }
+
+            @Override
+            public void onSuccess(Object value) {   // executes when login is successful
+                extractDeviceDetails(deviceList);
+                adapter.setmDeviceDetails(mDeviceDetails);
+                adapter.notifyDataSetChanged();
+                Log.d(LOG_TAG, "Device List updated ");
+
+            }
+
+            @Override
+            public void onFailure(ParticleCloudException e) {  //executes if login fails
+                Log.e(LOG_TAG, "Retrieving the device list failed ");
+                Log.e(LOG_TAG,  e.getBestMessage());
+                e.printStackTrace();
+                Log.e(LOG_TAG, e.getBestMessage());
+            }
+        });
+    }
+    }
+
