@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ValueActivity"
+            android:name=".SummaryActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:parentActivityName=".ListActivity"></activity>

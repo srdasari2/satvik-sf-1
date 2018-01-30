@@ -1,4 +1,4 @@
-package io.particle.hydroalert;
+package io.particle.hydroalert.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;

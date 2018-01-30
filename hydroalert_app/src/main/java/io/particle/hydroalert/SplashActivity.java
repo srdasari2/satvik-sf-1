@@ -19,8 +19,8 @@ import io.particle.android.sdk.cloud.ParticleCloud;
 import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.utils.Async;
-
-import static io.particle.hydroalert.ListActivity.DEVICE_LIST;
+import io.particle.hydroalert.util.DataHolder;
+import io.particle.hydroalert.util.EncryptionSetupReources;
 
 
 public class SplashActivity extends AppCompatActivity {
@@ -71,6 +71,7 @@ private final String LOG_TAG = SplashActivity.class.getName();
                 sparkCloud.logIn(email, password);                 //Login to the IoT cloud
                 Log.d(LOG_TAG, "Login Successful ");
                deviceList =  (ArrayList)sparkCloud.getDevices();  //Get all Particle devices for this account
+                DataHolder.getInstance().setDeviceList(deviceList);
                 Log.d(LOG_TAG, "Number of devices retrived from Particle Cloud :" + deviceList.size() );
                 return -1;
 
@@ -80,7 +81,6 @@ private final String LOG_TAG = SplashActivity.class.getName();
             public void onSuccess(Object value) {   // executes when login is successful
                 Log.d("Login Successful", "Logged in");
                 Intent intent = new Intent(SplashActivity.this, ListActivity.class);  //
-                intent.putParcelableArrayListExtra(DEVICE_LIST, deviceList); // Sending the device list to the next screen
                 startActivity(intent);                        //If successful, moving to screen that has  list of devices
                 finish();
             }

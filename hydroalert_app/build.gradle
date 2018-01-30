@@ -8,8 +8,8 @@ android {
         applicationId "com.io.hydroalert.alert_app"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 8
-        versionName "3.4"
+        versionCode 10
+        versionName "3.6"
     }
 
     buildTypes {
@@ -37,7 +37,9 @@ dependencies {
 
     compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'com.android.support:support-fragment:24.2.0'
+    compile 'com.android.support:design:24.2.1'
     // Add to the bottom of the file
-    apply plugin: 'com.google.gms.google-services'
+   apply plugin: 'com.google.gms.google-services'
+
 }
 

@@ -20,9 +20,7 @@ import io.particle.android.sdk.cloud.ParticleCloud;
 import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.utils.Async;
-
-import static io.particle.hydroalert.ValueActivity.ARG_DEVICEID;
-import static io.particle.hydroalert.ValueActivity.ARG_VALUE;
+import io.particle.hydroalert.util.DataHolder;
 
 public class ListActivity extends AppCompatActivity {
     public static final String DEVICE_LIST = "DEVICE_LIST";
@@ -37,7 +35,8 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState); //Required Android super class methiod called onCreate
         setContentView(R.layout.activity_list); // Setting View
         final ListView listView = (ListView)findViewById(R.id.devicelist);
-        deviceList = getIntent().getParcelableArrayListExtra(DEVICE_LIST); //Getting the device list to show
+       // deviceList = getIntent().getParcelableArrayListExtra(DEVICE_LIST); //Getting the device list to show
+        deviceList = DataHolder.getInstance().getDeviceList();
         extractDeviceDetails(deviceList);        //Getting device details form the cloud
         adapter = new DeviceDetailsAdapter(ListActivity.this, mDeviceDetails); //Assigns the values to different UI elements on the screen
        // ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.list_item, deviceNames);
@@ -64,6 +63,7 @@ public class ListActivity extends AppCompatActivity {
                 ParticleDevice device = deviceList.get(position);   // Get the position of the device selected by the user
                 if(device.isConnected()) {  //disabling the click action for offline devices
                     Log.d(LOG_TAG, device.getName() + "Is Online");
+                    DataHolder.getInstance().setSelectedDevice(device);
                     Async.executeAsync(ParticleCloud.get(ListActivity.this), new Async.ApiWork<ParticleCloud, Object>() {
 
                         private ParticleDevice mDevice;
@@ -76,9 +76,13 @@ public class ListActivity extends AppCompatActivity {
 
                             try {
                                 distance = mDevice.getIntVariable("in");  //Read the road2water_d3 from Cloud
-                                Log.d("Distance", "IN: " + distance);
+                                String url = mDevice.getStringVariable("url");
+                                DataHolder.setThingspeakUrlString(url);
+                                        Log.d("Distance", "IN: " + distance);
+                                        Log.d("url ", url);
                             } catch (ParticleDevice.VariableDoesNotExistException e) {
                                 Log.e(LOG_TAG, "Variable does not exist");
+                                DataHolder.setThingspeakUrlString("https://thingspeak.com/channels/262254");
                                 e.printStackTrace();
                             }
                             catch(ParticleCloudException e){
@@ -91,13 +95,20 @@ public class ListActivity extends AppCompatActivity {
                         }
 
                         @Override
+//                        public void onSuccess(Object value) { //Successfully read the waterlevel from the device
+//                            Log.d(LOG_TAG, "In variable read successfully " + value.toString());
+//                            DataHolder.getInstance().setDistance(distance);
+//                            Intent intent = new Intent(ListActivity.this, ValueActivity.class);
+//                            startActivity(intent);  //Transferring to Alert screen
+//                            progressBar.setVisibility(View.GONE);
+//                            finish();
+//                        }
                         public void onSuccess(Object value) { //Successfully read the waterlevel from the device
                             Log.d(LOG_TAG, "In variable read successfully " + value.toString());
-                            Intent intent = new Intent(ListActivity.this, ValueActivity.class);
-                            intent.putExtra(ARG_VALUE, distance);
-                            intent.putExtra(ARG_DEVICEID, mDevice.getID());
-                            intent.putExtra("device", mDevice);
-                            intent.putParcelableArrayListExtra(DEVICE_LIST, deviceList);
+                            DataHolder.setDistance(distance);
+                            //DataHolder.getEventItems().add(new EventItem(distance, new Date()));
+                           // Intent intent = new Intent(ListActivity.this, ValueActivity.class);
+                            Intent intent = new Intent(ListActivity.this, SummaryActivity.class);
                             startActivity(intent);  //Transferring to Alert screen
                             progressBar.setVisibility(View.GONE);
                             finish();
@@ -146,6 +157,7 @@ public class ListActivity extends AppCompatActivity {
             @Override
             public Object callApi(ParticleCloud sparkCloud) throws ParticleCloudException, IOException {
                 deviceList =  (ArrayList)sparkCloud.getDevices();  //Get all Particle devices for this account
+                DataHolder.getInstance().setDeviceList(deviceList);
                 Log.d(LOG_TAG, "Number of devices retrived from Particle Cloud :" + deviceList.size() );
                 return -1;
 

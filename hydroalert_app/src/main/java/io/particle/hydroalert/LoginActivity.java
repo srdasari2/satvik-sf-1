@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,20 +13,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-
 import com.cimosys.basic.encryption.util.CipherHelper;
-import com.cimosys.common.encryption.SimpleCipher;
-
 
 import java.io.IOException;
-
-import javax.crypto.Cipher;
 
 import io.particle.android.sdk.cloud.ParticleCloud;
 import io.particle.android.sdk.cloud.ParticleCloudException;
 import io.particle.android.sdk.cloud.ParticleDevice;
 import io.particle.android.sdk.utils.Async;
-import io.particle.android.sdk.utils.Toaster;
 
 public class LoginActivity extends AppCompatActivity {
  Button loginButton;
@@ -44,7 +37,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         SP = getApplication().getSharedPreferences("encryption", Context.MODE_PRIVATE);
         SP.edit().putString("CipherPwd", getString(R.string.cipher_password)).commit();
         cipherHelper = new CipherHelper(SP.getString("CipherPwd", null));
@@ -118,8 +110,8 @@ public class LoginActivity extends AppCompatActivity {
                             public void onSuccess(Object value) {
                                  Log.d("Login Successful", "Logged in");
                                 dismissDialog(PROGRESS_BAR);
-                                Intent intent = ValueActivity.buildIntent(LoginActivity.this, distance,  mDevice.getID());
-                                startActivity(intent);
+                               // Intent intent = ValueActivity.buildIntent(LoginActivity.this, distance,  DataHolder.getInstance().getSelectedDevice().getID());
+                                //startActivity(intent);
                             }
 
                             @Override
