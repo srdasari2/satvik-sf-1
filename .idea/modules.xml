@@ -3,8 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/cloudsdk/cloudsdk.iml" filepath="$PROJECT_DIR$/cloudsdk/cloudsdk.iml" />
+      <module fileurl="file://C:\Users\Satti\StudioProjects\satvik-sf-1\cloudsdk\cloudsdk.iml" filepath="C:\Users\Satti\StudioProjects\satvik-sf-1\cloudsdk\cloudsdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/hydroalert_app/hydroalert_app.iml" filepath="$PROJECT_DIR$/hydroalert_app/hydroalert_app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/spark-sdk-android-master.iml" filepath="$PROJECT_DIR$/spark-sdk-android-master.iml" />
+      <module fileurl="file://C:\Users\Satti\StudioProjects\satvik-sf-1\hydroalert_app\hydroalert_app.iml" filepath="C:\Users\Satti\StudioProjects\satvik-sf-1\hydroalert_app\hydroalert_app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/satvik-sf-1.iml" filepath="$PROJECT_DIR$/satvik-sf-1.iml" />
+      <module fileurl="file://C:\Users\Satti\StudioProjects\satvik-sf-1\spark-sdk-android-master.iml" filepath="C:\Users\Satti\StudioProjects\satvik-sf-1\spark-sdk-android-master.iml" />
     </modules>
   </component>
 </project>
